@@ -14,6 +14,8 @@ const port = process.env.PORT || 3001;
 
 const room = "spywerk";
 const userList = [];
+const places = require("./gameSource").places
+let placeIndex, spy, spyIndex
 
 io.on("connection", (socket) => {
   console.log('A user connected with ID: ' + socket.id);
@@ -28,10 +30,26 @@ io.on("connection", (socket) => {
     console.log('Total users: ' + userList.length);
 
     io.in(room).emit('friend-join', userList);
-
-    socket.emit('user-list', userList);
-    console.log('user-list emitted');
   });
+
+  socket.on('game-start', () => {
+    // return random int between 0 to (length-1)
+    placeIndex = Math.floor(Math.random() * places.length);
+    spyIndex = Math.floor(Math.random() * userList.length);
+
+    spy = userList[spyIndex].username
+    const roles = places[placeIndex].roles
+
+    userList.forEach((user, i) => (
+      userList[i] = {
+      id: user.id,
+      username: user.username,
+      role: user.username === spy ? "Spy" : roles[Math.floor(Math.random() * roles.length)],
+      place: user.username === spy ? "?" : places[placeIndex].name
+    }))
+
+    io.in(room).emit('role-assign', { userList });
+  })
 
   socket.on('disconnect', () => {
     const i = userList.findIndex((user) => user.id === socket.id);
