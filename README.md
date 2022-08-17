@@ -14,7 +14,7 @@ git clone https://github.com/gatraenggar/spyServ.git
 npm install
 ```
 ```
-node index.js
+npm start
 ```
 
 # Commit Message Convention
