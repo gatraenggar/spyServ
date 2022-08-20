@@ -7,7 +7,7 @@ class Game {
   }
 
   start(room) {
-    this.socket.on("game-start", () => {
+    this.socket.on("game-start", ({ duration: minutes }) => {
       let placeIndex, spy, spyIndex
 
       // return random int between 0 to (length-1)
@@ -28,7 +28,7 @@ class Game {
 
       const endTime = new Date(
         new Date().getTime() 
-        + (8*60000+3000)
+        + ( (minutes * 60000) + 3000)
       ).getTime()
   
       this.io.in(room).emit('role-assign', { userList: this.userList, endTime });
