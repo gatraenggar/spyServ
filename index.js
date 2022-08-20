@@ -28,6 +28,7 @@ io.on("connection", (socket) => {
   
   user.join(room)
   game.start(room)
+  game.vote(room)
   connection.disconnect(room)
 });
 
