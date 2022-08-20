@@ -24,8 +24,13 @@ class Game {
         role: user.username === spy ? "Spy" : roles[Math.floor(Math.random() * roles.length)],
         place: user.username === spy ? "?" : this.places[placeIndex].name
       }))
+
+      const endTime = new Date(
+        new Date().getTime() 
+        + (8*60000+3000)
+      ).getTime()
   
-      this.io.in(room).emit('role-assign', { userList: this.userList });
+      this.io.in(room).emit('role-assign', { userList: this.userList, endTime });
     })
   }
 }
